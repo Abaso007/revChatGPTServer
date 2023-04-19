@@ -33,18 +33,16 @@ async def read_root(body: Item, response: Response):
         "parent_message_id":body.parent_id if body.parent_id else chatbot.generate_uuid(),
         "model":"text-davinci-002-render"
     }
-    
+
     try:
-        result = chatbot.get_chat_text(data)
-        if result:
+        if result := chatbot.get_chat_text(data):
             return {"response": result}
         else:
             raise Exception("No response")
     except Exception as e:
         chatbot.refresh_session()
         try: 
-            result = chatbot.get_chat_text(data)
-            if result:
+            if result := chatbot.get_chat_text(data):
                 return {"response": result}
             else:
                 raise Exception("No response")
